@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 838568617}
   - component: {fileID: 838568616}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: QuizManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
