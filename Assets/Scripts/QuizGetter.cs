@@ -43,6 +43,7 @@ public class QuizGetter : MonoBehaviour {
                 Debug.Log(quizData.type);
                 Debug.Log(quizData.answer_txt);
             Debug.Log(quizData.text);
+
             //taskArray = todo.task.Split('|');
         }
     
