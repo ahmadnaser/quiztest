@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using LitJson;
 
 public class QuizGetter : MonoBehaviour {
     string quizUrl;
@@ -14,14 +15,36 @@ public class QuizGetter : MonoBehaviour {
         public string answer_txt;
         public int answer_num;
     }
+
+    public List<Quizes> quizList = new List<Quizes>();
+    public class Quizes
+    {
+        public int type;
+        public string text;
+        public string answer_txt;
+        public int answer_num;
+    }
+    /*
+    public class QuizArray
+    {
+        //public int count;
+        public List<Quizes> quizes;
+    }*/
+
+    [Serializable]
+    public class QuizDatas
+    {
+        public string type;
+
+    }
     void Awake()
     {
         quizUrl = "http://192.168.179.5/quiz/index.php";
-        StartCoroutine(RequestAPI());
+        StartCoroutine(RequestQuizOne());
     }
 
 
-    public IEnumerator RequestAPI()
+    public IEnumerator RequestQuizOne()
     {
         
             WWWForm wwwForm = new WWWForm();
@@ -48,9 +71,38 @@ public class QuizGetter : MonoBehaviour {
         }
     
 }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public IEnumerator RequestQuizes()
+    {
+        WWWForm wwwForm = new WWWForm();
+        wwwForm.AddField("quiz_count", 5);
+        wwwForm.AddField("type", "yontaku");        //4択だけど直そう
+
+        WWW result = new WWW(quizUrl, wwwForm);
+        //Debug.Log("test");
+        yield return result;
+
+        if (!string.IsNullOrEmpty(result.error))
+        {
+            Debug.LogError("www Error:" + result.error);
+        }
+        else
+        {
+            Debug.Log(result.text);
+            //string[] quizArray = LitJson.JsonMapper.ToObject<string[]>(result.text);
+            var quizArray = LitJson.JsonMapper.ToObject<string[]>(result.text);
+            Debug.Log(quizArray[0]);
+            foreach(string quiz in quizArray)
+            {
+                Quizes tmp = JsonUtility.FromJson<Quizes>(quiz);
+                quizList.Add(tmp);
+            }
+            
+        }
+    }
+
+    public void testRequestQuizes()
+    {
+        StartCoroutine(RequestQuizes());
+    }
 }

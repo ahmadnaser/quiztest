@@ -12,6 +12,8 @@ public class UserDataController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        GameObject userManager = GameObject.Find("UserManager");
+        userManager.GetComponent<UserManager>().ShowUserData();
 	}
 	
 	// Update is called once per frame
@@ -20,7 +22,10 @@ public class UserDataController : MonoBehaviour {
 
 	public void UserDataReceived(int userId,string userName,string createTime,int totalAnswer,int correctAnswer){
 		sendUserId (userId);
-
+        sendUserName(userName);
+        sendCreateTime(createTime);
+        sendTotalAnswer(totalAnswer);
+        sendCorrectAnswer(correctAnswer);
 	}
 
 	//自分のIDのUIを更新するメソッド

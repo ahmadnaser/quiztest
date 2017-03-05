@@ -1076,7 +1076,7 @@ GameObject:
   - component: {fileID: 1773208349}
   - component: {fileID: 1773208348}
   m_Layer: 0
-  m_Name: ChangeQuiz
+  m_Name: SceneLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
