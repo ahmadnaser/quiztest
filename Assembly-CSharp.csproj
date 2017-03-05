@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ChangeQuiz.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\QuizGetter.cs" />
+     <Compile Include="Assets\Scripts\SingletonTest.cs" />
      <Compile Include="Assets\Scripts\UIManager.cs" />
      <Compile Include="Assets\UserDataController.cs" />
  <Reference Include="UnityEngine.UI">

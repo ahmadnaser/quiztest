@@ -12,4 +12,10 @@ public class ChangeQuiz : MonoBehaviour {
 	public void SceneUserData(){
 		SceneManager.LoadScene ("UserData");
 	}
+
+	/*public void SceneMain(){
+		SceneManager.LoadMain ("Main");
+	}*/
+
 }
+
