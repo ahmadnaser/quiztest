@@ -16,14 +16,14 @@ public class QuizGetter : MonoBehaviour {
     }
     void Awake()
     {
-        quizUrl = "";
+        quizUrl = "http://192.168.179.5/quiz/index.php";
+        StartCoroutine(RequestAPI());
     }
+
 
     public IEnumerator RequestAPI()
     {
-
-        while (true)
-        {
+        
             WWWForm wwwForm = new WWWForm();
             wwwForm.AddField("quiz_id", 1);
             wwwForm.AddField("type", "yontaku");        //4択だけど直そう
@@ -38,12 +38,14 @@ public class QuizGetter : MonoBehaviour {
             }
             else
             {
+            Debug.Log(result.text);
                 QuizData quizData = JsonUtility.FromJson<QuizData>(result.text);
                 Debug.Log(quizData.type);
-                Debug.Log(quizData.text);
-                //taskArray = todo.task.Split('|');
+                Debug.Log(quizData.answer_txt);
+            Debug.Log(quizData.text);
+            //taskArray = todo.task.Split('|');
         }
-    }
+    
 }
 	
 	// Update is called once per frame
