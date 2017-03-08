@@ -64,7 +64,7 @@ public class UserManager : MonoBehaviour{
     }
 
     //シーンが有効化されたときに呼び出す
-    public void ShowUserData()
+    public void SaveUserData()
     {
         StartCoroutine(RequestUserData(SendUserData, 1));
     }

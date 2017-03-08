@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 using LitJson;
 
 public class QuizGetter : MonoBehaviour {
@@ -24,12 +25,11 @@ public class QuizGetter : MonoBehaviour {
         public string answer_txt;
         public int answer_num;
     }
-    /*
     public class QuizArray
     {
         //public int count;
-        public List<Quizes> quizes;
-    }*/
+        public List<string> quizes;
+    }
 
     [Serializable]
     public class QuizDatas
@@ -40,7 +40,7 @@ public class QuizGetter : MonoBehaviour {
     void Awake()
     {
         quizUrl = "http://192.168.179.5/quiz/index.php";
-        StartCoroutine(RequestQuizOne());
+        //StartCoroutine(RequestQuizOne());
     }
 
 
@@ -72,10 +72,10 @@ public class QuizGetter : MonoBehaviour {
     
 }
 
-    public IEnumerator RequestQuizes()
+    public IEnumerator RequestQuizes(UnityAction<List<Quizes>> callback,int quizCount)
     {
         WWWForm wwwForm = new WWWForm();
-        wwwForm.AddField("quiz_count", 5);
+        wwwForm.AddField("quiz_count", quizCount);
         wwwForm.AddField("type", "yontaku");        //4択だけど直そう
 
         WWW result = new WWW(quizUrl, wwwForm);
@@ -85,24 +85,32 @@ public class QuizGetter : MonoBehaviour {
         if (!string.IsNullOrEmpty(result.error))
         {
             Debug.LogError("www Error:" + result.error);
+            //受信しなおす必要がある
         }
         else
         {
             Debug.Log(result.text);
+            quizList = new List<Quizes>();
             //string[] quizArray = LitJson.JsonMapper.ToObject<string[]>(result.text);
             var quizArray = LitJson.JsonMapper.ToObject<string[]>(result.text);
             Debug.Log(quizArray[0]);
-            foreach(string quiz in quizArray)
+            foreach (string quiz in quizArray)
             {
                 Quizes tmp = JsonUtility.FromJson<Quizes>(quiz);
                 quizList.Add(tmp);
             }
             
+            callback(quizList);
         }
     }
 
     public void testRequestQuizes()
     {
-        StartCoroutine(RequestQuizes());
+        //StartCoroutine(RequestQuizes(unko));
+    }
+
+    public void unko(List<Quizes> tako)
+    {
+        //Debug.Log(tako[0].text);
     }
 }

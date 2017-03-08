@@ -13,7 +13,7 @@ public class UserDataController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GameObject userManager = GameObject.Find("UserManager");
-        userManager.GetComponent<UserManager>().ShowUserData();
+        userManager.GetComponent<UserManager>().SaveUserData();
 	}
 	
 	// Update is called once per frame
