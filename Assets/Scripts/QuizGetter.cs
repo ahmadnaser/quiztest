@@ -12,6 +12,7 @@ public class QuizGetter : MonoBehaviour {
     public class QuizData
     {
         public int type;
+        //public int quiz_id;
         public string text;
         public string answer_txt;
         public int answer_num;
@@ -21,6 +22,7 @@ public class QuizGetter : MonoBehaviour {
     public class Quizes
     {
         public int type;
+        public int quiz_id;
         public string text;
         public string answer_txt;
         public int answer_num;
@@ -101,6 +103,36 @@ public class QuizGetter : MonoBehaviour {
             }
             
             callback(quizList);
+        }
+    }
+
+    //結果をpostで送信する　successが帰ってきたら成功
+    public IEnumerator PostResult(string quiz_tf,string quiz_id)
+    {
+        Debug.Log(quiz_tf);
+        Debug.Log(quiz_id);
+
+        WWWForm wwwForm = new WWWForm();
+        wwwForm.AddField("quiz_id",quiz_id);
+        wwwForm.AddField("quiz_tf", quiz_tf);
+        wwwForm.AddField("id",2);
+        wwwForm.AddField("type", "result");
+
+
+        WWW result = new WWW(quizUrl, wwwForm);
+        //Debug.Log("test");
+        yield return result;
+
+        if (!string.IsNullOrEmpty(result.error))
+        {
+            Debug.LogError("www Error:" + result.error);
+            //受信しなおす必要がある
+        }
+        else
+        {
+            Debug.Log(result.text);
+            
+            
         }
     }
 

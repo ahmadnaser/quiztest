@@ -42,6 +42,7 @@ public class QuizSceneManager : MonoBehaviour {
     public class Quizes
     {
         public int type;
+        public int quiz_id;
         public string text;
         public string answer_txt;
         public int answer_num;
@@ -82,8 +83,7 @@ public class QuizSceneManager : MonoBehaviour {
                 AnswerAction();
                 break;
             case GameState.Result:
-                int countTrue = quizResults.Count(boolean => boolean == true);
-                Debug.Log("正解数：" + countTrue);
+                StartCoroutine(ResultAction());
                 break;
 
         }
@@ -115,7 +115,7 @@ public class QuizSceneManager : MonoBehaviour {
     {
         //ユーザーの入力した答えの番号を0(=未入力)にして入力待ちの状態にする
         usersAnswerNum = 0;
-        maxTime = 20f;
+        maxTime = 10f;
         yield return StartCoroutine(quizUIManager.TimerAndButtonCoroutine(maxTime));
 
         if (usersAnswerNum != 0) Debug.Log("Button:" + usersAnswerNum);
@@ -147,6 +147,13 @@ public class QuizSceneManager : MonoBehaviour {
         }
 
     }
+
+    IEnumerator ResultAction()
+    {
+        string quizTF = JoinQuizTFData(quizResults);
+        string quizId = JoinQuizId(quizes);
+        yield return StartCoroutine(quizGetter.PostResult(quizTF,quizId));
+    }
     //コルーチンの結果をコールバックで受け取ってquizesに保存する
     public void SaveReceivedQuizes(List<QuizGetter.Quizes> receivedQuizes)
     {
@@ -155,6 +162,7 @@ public class QuizSceneManager : MonoBehaviour {
         {
             Quizes tmp = new Quizes();
             tmp.type = quiz.type;
+            tmp.quiz_id = quiz.quiz_id;
             tmp.text = quiz.text;
             tmp.answer_txt = quiz.answer_txt;
             tmp.answer_num = quiz.answer_num;
@@ -176,6 +184,31 @@ public class QuizSceneManager : MonoBehaviour {
             quizUIManager.hasAnswered = true;
         }
     }
+    
+    //結果をpostで送るときにクイズのidを結合して送るメソッド
+    //ちゃんとlinqつかってほしい
+    string JoinQuizId(List<Quizes> list)
+    {
+        string postQuizId = "";
+        foreach(Quizes quiz in list)
+        {
+            Debug.Log(quiz.quiz_id);
+            if (postQuizId == "") postQuizId = quiz.quiz_id.ToString();
+            else postQuizId += "," + quiz.quiz_id.ToString();
+        }
+        return postQuizId;
+    }
 
+    string JoinQuizTFData(List<bool> list)
+    {
+        string postQuizTF = "";
+        foreach(bool result in list)
+        {
+            if (result == true)postQuizTF += ",1";
+            else postQuizTF += ",0";
+        }
+
+        return postQuizTF.Substring(1);
+    }
 
 }

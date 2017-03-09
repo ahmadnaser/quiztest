@@ -10,10 +10,11 @@ public class UserDataController : MonoBehaviour {
 	public Text	totalAnswerText;
 	public Text correctAnswerText;
 
+    int userId = 2;
 	// Use this for initialization
 	void Start () {
         GameObject userManager = GameObject.Find("UserManager");
-        userManager.GetComponent<UserManager>().SaveUserData();
+        userManager.GetComponent<UserManager>().SaveUserData(userId);
 	}
 	
 	// Update is called once per frame

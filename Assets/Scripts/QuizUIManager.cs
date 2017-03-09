@@ -51,6 +51,7 @@ public class QuizUIManager : MonoBehaviour {
         hasAnswered = false;
         while ((!isTimeOver) && (!hasAnswered))
         {
+            //Debug.Log(timeCount);
             timeCount -= Time.deltaTime;
             timerSlider.value = timeCount;
             if (timeCount < Time.deltaTime)
