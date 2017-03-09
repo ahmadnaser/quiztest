@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 
 public enum GameState
@@ -22,16 +21,19 @@ public class QuizSceneManager : MonoBehaviour {
     int quizCount = 5;
 
     GameObject QuizManager;
+    QuizUIManager quizUIManager;
     QuizGetter quizGetter;
-
+    /*
     GameObject quizTextPanel;
     GameObject Button1;
     GameObject Button2;
     GameObject Button3;
     GameObject Button4;
-
+    */
     bool hasAnswered;
     int usersAnswerNum;
+
+    float maxTime;
 
 
     int quizTurn;
@@ -51,7 +53,9 @@ public class QuizSceneManager : MonoBehaviour {
     {
         Instance = this;
         QuizManager = GameObject.Find("QuizManager");
+        quizUIManager = gameObject.GetComponent<QuizUIManager>();
         quizGetter = QuizManager.GetComponent<QuizGetter>();
+
         SetCurrentState(GameState.Start);
     }
 
@@ -90,7 +94,9 @@ public class QuizSceneManager : MonoBehaviour {
         //クイズを受信するコルーチンを呼び出す　終わったらリストをコピーする
         yield return StartCoroutine(quizGetter.RequestQuizes(SaveReceivedQuizes,quizCount));
         quizTurn = -1;      //ここ汚い
-        GetUIPanel();
+        //とりあえず時間のマックスは10秒に設定
+        maxTime = 10f;
+        quizUIManager.GetUIPanel(maxTime);
         SetCurrentState(GameState.Prepare);
 	}
 	
@@ -100,7 +106,7 @@ public class QuizSceneManager : MonoBehaviour {
     {
         quizTurn++;
         yield return new WaitForSeconds(1);
-        SetQuizOnPanel(quizes, quizTurn);
+        quizUIManager.SetQuizOnPanel(quizes, quizTurn);
         SetCurrentState(GameState.Wait);
     }
 
@@ -109,9 +115,12 @@ public class QuizSceneManager : MonoBehaviour {
     {
         //ユーザーの入力した答えの番号を0(=未入力)にして入力待ちの状態にする
         usersAnswerNum = 0;
-        yield return StartCoroutine(WaitButtonClick());
+        maxTime = 20f;
+        yield return StartCoroutine(quizUIManager.TimerAndButtonCoroutine(maxTime));
 
-        Debug.Log("Button:" + usersAnswerNum);
+        if (usersAnswerNum != 0) Debug.Log("Button:" + usersAnswerNum);
+        else Debug.Log("time UP");      //テストでもanswerに飛ばないように分岐するべき
+
         SetCurrentState(GameState.Answer);
     }
 
@@ -156,45 +165,17 @@ public class QuizSceneManager : MonoBehaviour {
         Debug.Log(quizes[1].answer_num);
     }
 
-    //フラグが変わるまで(=ボタンが押されるまで)コルーチン内で待つ
-    IEnumerator WaitButtonClick()
-    {
-        hasAnswered = false;
-        while (!hasAnswered)
-        {
-            yield return null;
-        }
-    }
+
     //ボタンの入力を受け付けるメソッド
+    //ボタン入力を待つメソッド(コルーチン)はUIManagerへ　ちゃんと設計しろ
     public void ButtonClicked(int answerNum)
     {
         if (currentGameState == GameState.Wait)
         {
             usersAnswerNum = answerNum;
-            hasAnswered = true;
+            quizUIManager.hasAnswered = true;
         }
     }
 
-    //各UIに問題と選択肢を登録する
-    //
-    void SetQuizOnPanel(List<Quizes> tmpquizes,int i)
-    {
-        quizTextPanel.GetComponent<Text>().text = tmpquizes[i].text;
-        string[] array = tmpquizes[i].answer_txt.Split(',');
-        Button1.GetComponent<Text>().text = array[0];
-        Button2.GetComponent<Text>().text = array[1];
-        Button3.GetComponent<Text>().text = array[2];
-        Button4.GetComponent<Text>().text = array[3];
-        //Debug.Log(tmpquizes[i].text);
-    }
 
-
-    void GetUIPanel()
-    {
-        quizTextPanel = GameObject.Find("Canvas/Panel/QuizText/Text");
-        Button1 = GameObject.Find("Canvas/Panel/Choices/Button1/Text");
-        Button2 = GameObject.Find("Canvas/Panel/Choices/Button2/Text");
-        Button3 = GameObject.Find("Canvas/Panel/Choices/Button3/Text");
-        Button4 = GameObject.Find("Canvas/Panel/Choices/Button4/Text");
-    }
 }
