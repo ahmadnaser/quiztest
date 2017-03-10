@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour {
 
-	public void SceneQuiz(){
-		SceneManager.LoadScene("Quiz");
+	public void SceneQuiz()
+    {
+        PhotonManager.CreateOrJoinRoom(1236);
+        Debug.Log(PhotonNetwork.inRoom);
+        SceneManager.LoadScene("Quiz");
 	}
 
 	public void SceneUserData(){

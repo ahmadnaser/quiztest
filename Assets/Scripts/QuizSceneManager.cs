@@ -12,7 +12,7 @@ public enum GameState
     Result
 }
 
-public class QuizSceneManager : MonoBehaviour {
+public class QuizSceneManager : Photon.MonoBehaviour {
     public static QuizSceneManager Instance;
 
     private GameState currentGameState;
@@ -80,6 +80,7 @@ public class QuizSceneManager : MonoBehaviour {
                 StartCoroutine(WaitAction());
                 break;
             case GameState.Answer:
+                Debug.Log(PhotonNetwork.inRoom);
                 AnswerAction();
                 break;
             case GameState.Result:
@@ -198,7 +199,7 @@ public class QuizSceneManager : MonoBehaviour {
         }
         return postQuizId;
     }
-
+    //Linqつかえ
     string JoinQuizTFData(List<bool> list)
     {
         string postQuizTF = "";
@@ -209,6 +210,12 @@ public class QuizSceneManager : MonoBehaviour {
         }
 
         return postQuizTF.Substring(1);
+    }
+
+
+    void OnGUI()
+    {
+        GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
     }
 
 }

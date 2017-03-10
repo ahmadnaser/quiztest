@@ -35,7 +35,7 @@ public class UserManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(gameObject);
         //Debug.Log("unko");
-        url = "http://192.168.179.5/quiz/index.php";
+        url = "http://uinga2007.s25.xrea.com/quiz/quiz.php";
     }
 
 
