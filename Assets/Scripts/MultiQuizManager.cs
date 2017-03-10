@@ -21,12 +21,18 @@ public class MultiQuizManager : Photon.PunBehaviour {
     }
 
     [PunRPC]
-    private void SendTimeRPC(float time,UnityAction<bool> callback)
+    private void SendTimeRPC(float time,UnityAction callback)
     {
         otherTime = time;
+        if (myTime == ) callback();
     }
+
     public bool isFasterThan()
     {
-        return true;
+        if (myTime > otherTime)
+        {
+            return true;
+        }
+        else return false;
     }
 }
