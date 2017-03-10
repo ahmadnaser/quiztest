@@ -41,7 +41,7 @@ public class QuizGetter : MonoBehaviour {
     }
     void Awake()
     {
-        quizUrl = "http://192.168.179.5/quiz/index.php";
+        quizUrl = "http://uinga2007.s25.xrea.com/quiz/quiz.php";
         //StartCoroutine(RequestQuizOne());
     }
 

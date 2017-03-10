@@ -14,9 +14,17 @@ public class QuizUIManager : MonoBehaviour {
 
     GameObject Timer;
     Slider timerSlider;
+    Slider otherTimerSlider;
+
+    MultiQuizManager multiQuizManager;
 
     public bool hasAnswered = false;
+    public bool otherAnswered = false;
 
+    void Start()
+    {
+        multiQuizManager = GameObject.Find("MultiQuizManager").GetComponent<MultiQuizManager>();
+    }
     public void GetUIPanel(float maxTime)
     {
         quizTextPanel = GameObject.Find("Canvas/Panel/QuizText/Text");
@@ -58,6 +66,11 @@ public class QuizUIManager : MonoBehaviour {
             {
                 isTimeOver = true;
             }
+            if (otherAnswered)
+            {
+                LoseUIAction();
+                yield break;
+            }
 
             yield return null;
         }
@@ -65,10 +78,18 @@ public class QuizUIManager : MonoBehaviour {
         //答えたならタイマーはそのままで
         if(hasAnswered == true)
         {
+            multiQuizManager.SendAllAnswerTime(maxTime-timeCount);
             yield break;
         }
         timeCount = 0f;
         timerSlider.value = 0f;
 
     }
+    //自分が答えるより早く相手が答えたときにUIをいじるメソッド
+    public void LoseUIAction()
+    {
+        Debug.Log("make");
+    }
+    //相手のtimerのバーを更新するメソッド
+
 }

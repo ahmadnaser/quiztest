@@ -13,7 +13,7 @@ public class PhotonManager : Photon.PunBehaviour{
         PhotonNetwork.ConnectUsingSettings("0.1");
     }
 
-    void OnJoinedLobby()
+    public override void OnJoinedLobby()
     {
         Debug.Log("Lobby Joined!");
     }
@@ -21,9 +21,9 @@ public class PhotonManager : Photon.PunBehaviour{
     public static void CreateOrJoinRoom(int roomNum)
     {
         RoomOptions roomOptions = new RoomOptions();
-        roomOptions.isVisible = true;
-        roomOptions.isOpen = true;
-        roomOptions.maxPlayers = 2;
+        roomOptions.IsVisible = true;
+        roomOptions.IsOpen = true;
+        roomOptions.MaxPlayers = 2;
 
         bool tf = PhotonNetwork.JoinOrCreateRoom(roomNum.ToString(), roomOptions,null);
         Debug.Log("result:" + tf);

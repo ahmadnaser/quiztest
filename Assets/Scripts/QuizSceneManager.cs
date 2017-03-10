@@ -23,6 +23,7 @@ public class QuizSceneManager : Photon.MonoBehaviour {
     GameObject QuizManager;
     QuizUIManager quizUIManager;
     QuizGetter quizGetter;
+    MultiQuizManager multiQuizManager;
     /*
     GameObject quizTextPanel;
     GameObject Button1;
@@ -35,6 +36,7 @@ public class QuizSceneManager : Photon.MonoBehaviour {
 
     float maxTime;
 
+    public static bool isFast;
 
     int quizTurn;
 
@@ -56,6 +58,7 @@ public class QuizSceneManager : Photon.MonoBehaviour {
         QuizManager = GameObject.Find("QuizManager");
         quizUIManager = gameObject.GetComponent<QuizUIManager>();
         quizGetter = QuizManager.GetComponent<QuizGetter>();
+        multiQuizManager = GameObject.Find("MultiQuizManager").GetComponent<MultiQuizManager>();
 
         SetCurrentState(GameState.Start);
     }
@@ -80,7 +83,6 @@ public class QuizSceneManager : Photon.MonoBehaviour {
                 StartCoroutine(WaitAction());
                 break;
             case GameState.Answer:
-                Debug.Log(PhotonNetwork.inRoom);
                 AnswerAction();
                 break;
             case GameState.Result:
@@ -106,6 +108,7 @@ public class QuizSceneManager : Photon.MonoBehaviour {
     IEnumerator PrepareAction()
     {
         quizTurn++;
+        multiQuizManager.InitTime();
         yield return new WaitForSeconds(1);
         quizUIManager.SetQuizOnPanel(quizes, quizTurn);
         SetCurrentState(GameState.Wait);
