@@ -24,7 +24,13 @@ public class UserManager : MonoBehaviour{
         public int count_correct;
     }
 
-    UserData userData;
+    public static UserData userData;
+
+    public static int GetUserId()
+    {
+        return userData.id;
+    }
+
     // Use this for initialization
     void Awake () {
         if(Instance != null)

@@ -107,7 +107,7 @@ public class QuizGetter : MonoBehaviour {
     }
 
     //結果をpostで送信する　successが帰ってきたら成功
-    public IEnumerator PostResult(string quiz_tf,string quiz_id)
+    public IEnumerator PostResult(string quiz_tf,string quiz_id,int id)
     {
         Debug.Log(quiz_tf);
         Debug.Log(quiz_id);
@@ -115,7 +115,7 @@ public class QuizGetter : MonoBehaviour {
         WWWForm wwwForm = new WWWForm();
         wwwForm.AddField("quiz_id",quiz_id);
         wwwForm.AddField("quiz_tf", quiz_tf);
-        wwwForm.AddField("id",2);
+        wwwForm.AddField("id",id);
         wwwForm.AddField("type", "result");
 
 

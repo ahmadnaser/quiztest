@@ -156,7 +156,8 @@ public class QuizSceneManager : Photon.MonoBehaviour {
     {
         string quizTF = JoinQuizTFData(quizResults);
         string quizId = JoinQuizId(quizes);
-        yield return StartCoroutine(quizGetter.PostResult(quizTF,quizId));
+        int userId = UserManager.GetUserId();
+        yield return StartCoroutine(quizGetter.PostResult(quizTF,quizId,userId));
     }
     //コルーチンの結果をコールバックで受け取ってquizesに保存する
     public void SaveReceivedQuizes(List<QuizGetter.Quizes> receivedQuizes)
